@@ -9,8 +9,8 @@ import {Agent} from "alith";
 async function getAliceTradingAdvice(value: number, leverage:number) {
     try {
         const agent = new Agent({
-            apiKey: process.env.GEMINI_API_KEY,
-            model: "gemini-1.5-pro",
+            apiKey: process.env.OPENAI_API_KEY,
+            model: "gpt-4o",
             preamble: "You are Alice, an expert cryptocurrency trading advisor. You provide specific, actionable trading advice with clear entry/exit points and risk management strategies. You focus on technical analysis and market trends to give precise recommendations."
         });
 
