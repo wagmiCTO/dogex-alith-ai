@@ -1,0 +1,1 @@
+airdrop wallet - https://berascan.com/address/0xbabe777e1a43053c273bd8a4e45d0cb6c20f8fc6 
