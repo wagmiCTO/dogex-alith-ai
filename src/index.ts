@@ -44,9 +44,60 @@ new Elysia({ adapter: node() })
             };
         }
     })
+    .post('/analyze', async ({ body }: { body: any }) => {
+        try {
+            const { positionSize, entryPrice, liquidationPrice, currentPrice, pnlSize } = body;
+
+            // Validate required fields
+            if (!positionSize || !entryPrice || !liquidationPrice || !currentPrice || pnlSize === undefined) {
+                return {
+                    success: false,
+                    error: 'Missing required fields: positionSize, entryPrice, liquidationPrice, currentPrice, pnlSize',
+                    timestamp: new Date().toISOString()
+                };
+            }
+
+            // Calculate position metrics
+            const distanceToLiquidation = Math.abs((currentPrice - liquidationPrice) / currentPrice) * 100;
+            const isLong = currentPrice > entryPrice ? (pnlSize > 0) : (pnlSize < 0);
+            const positionType = isLong ? "LONG" : "SHORT";
+            const riskLevel = distanceToLiquidation < 10 ? "HIGH" : distanceToLiquidation < 25 ? "MEDIUM" : "LOW";
+
+            // Create analysis prompt
+            const funnyPrompts = [
+                `Your ${positionType} DOGE position is ${pnlSize >= 0 ? 'printing' : 'bleeding'}, ${distanceToLiquidation.toFixed(1)}% from liquidation - ${riskLevel} risk vibes only, one sentence!`,
+
+                `DOGE ${positionType}: Entry $${entryPrice}, now $${currentPrice}, liq at $${liquidationPrice} - ${riskLevel} risk, pure vibes in one sentence!`,
+
+                `Your ${positionSize} DOGE ${positionType} is ${pnlSize >= 0 ? 'mooning' : 'cratering'}, ${distanceToLiquidation.toFixed(1)}% from rekt - vibe check in one sentence!`,
+
+                `DOGE ${positionType} from $${entryPrice} to $${currentPrice}, PnL: ${pnlSize >= 0 ? '+' : ''}$${pnlSize}, ${riskLevel} risk - one sentence vibe only!`,
+
+                `Your DOGE ${positionType} at $${currentPrice}, ${distanceToLiquidation.toFixed(1)}% from liquidation, ${riskLevel} risk ${pnlSize >= 0 ? 'gains' : 'pain'} - one sentence vibes!`
+            ];
+
+            const randomPrompt = funnyPrompts[Math.floor(Math.random() * funnyPrompts.length)];
+            const analysis = await agent.prompt(randomPrompt);
+
+            return {
+                success: true,
+                analysis: {
+                    aiAdvice: analysis,
+                    timestamp: new Date().toISOString()
+                }
+            };
+        } catch (error) {
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : 'Unknown error occurred',
+                timestamp: new Date().toISOString()
+            };
+        }
+    })
     .listen(3001, ({ hostname, port }: { hostname: string; port: number }) => {
         console.log(
             `🦊 Elysia is running at ${hostname}:${port}`
         )
         console.log(`📈 Get random AI trading position at: http://${hostname}:${port}/position`)
+        console.log(`🔍 Analyze your position at: http://${hostname}:${port}/analyze (POST)`)
     })
