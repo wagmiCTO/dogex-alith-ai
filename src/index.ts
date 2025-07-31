@@ -30,11 +30,11 @@ new Elysia({ adapter: node() })
         try {
             const randomPrompt = tradingPrompts[Math.floor(Math.random() * tradingPrompts.length)];
             const position = await agent.prompt(randomPrompt);
+            const leverage = Math.floor(Math.random() * 91) + 10; // Random number between 10-100
+
             return {
-                success: true,
-                position: position,
-                prompt: randomPrompt,
-                timestamp: new Date().toISOString()
+                leverage: leverage,
+                position: position
             };
         } catch (error) {
             return {
