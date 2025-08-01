@@ -3,12 +3,24 @@ import { Agent } from "alith";
 import { Elysia } from 'elysia'
 import { node } from '@elysiajs/node'
 import { cors } from '@elysiajs/cors';
+import axios from 'axios';
 
 const agent = new Agent({
     model: "llama3-70b-8192",
     apiKey: process.env.GROQ_API_KEY,
     baseUrl: "https://api.groq.com/openai/v1",
 });
+
+// Function to fetch current DOGE price from Binance
+async function getCurrentDogePrice() {
+    try {
+        const response = await axios.get('https://api.binance.com/api/v3/ticker/price?symbol=DOGEUSDT');
+        return Number.parseFloat(response.data.price);
+    } catch (error) {
+        console.error('Error fetching DOGE price:', error);
+        return null;
+    }
+}
 
 const tradingPrompts = [
     "I'm a junior vibe trader that wants to earn on dogecoin with 50x leverage and 1 min chart. What position should I take rn? Not financial advice, just vibes. in one sentence",
@@ -25,16 +37,24 @@ new Elysia({ adapter: node() })
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true
     }))
-    .get('/', () => 'Hello DogEx - DOGE AI Trading Vibes. Fook loses and vibes only!')
+    .get('/', async () => {
+        const dogePrice = await getCurrentDogePrice();
+        const priceInfo = dogePrice ? ` Current DOGE price: $${dogePrice.toFixed(6)}` : '';
+        return `Hello DogEx - DOGE AI Trading Vibes. Fook loses and vibes only!${priceInfo}`;
+    })
     .get('/position', async () => {
         try {
-            const randomPrompt = tradingPrompts[Math.floor(Math.random() * tradingPrompts.length)];
+            const dogePrice = await getCurrentDogePrice();
+            const priceInfo = dogePrice ? ` Current DOGE price is $${dogePrice.toFixed(6)}.` : '';
+
+            const randomPrompt = tradingPrompts[Math.floor(Math.random() * tradingPrompts.length)] + priceInfo;
             const position = await agent.prompt(randomPrompt);
             const leverage = Math.floor(Math.random() * 91) + 10; // Random number between 10-100
 
             return {
                 leverage: leverage,
-                position: position
+                position: position,
+                dogePrice: dogePrice
             };
         } catch (error) {
             return {
