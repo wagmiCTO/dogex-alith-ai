@@ -29,7 +29,7 @@ const tradingPrompts = [
     "If you were a degen trader looking at DOGE charts right now, what would you do? Vibes only, one sentence."
 ];
 
-const app = new Elysia()
+new Elysia()
     .use(cors({
         origin: true, // Allow all origins
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -112,22 +112,11 @@ const app = new Elysia()
                 timestamp: new Date().toISOString()
             };
         }
-    });
-
-// For Railway's WebStandard environment, export the fetch handler
-export default app;
-
-// For local development, check if we're not in a WebStandard environment
-if (typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
-    const port = process.env.PORT || 3001;
-    try {
-        app.listen(port, () => {
-            console.log(`🦊 Elysia is running at localhost:${port}`);
-            console.log(`📈 Get random AI trading position at: http://localhost:${port}/position`);
-            console.log(`🔍 Analyze your position at: http://localhost:${port}/analyze (POST)`);
-        });
-    // biome-ignore lint/correctness/noUnusedVariables: <explanation>
-    } catch (error) {
-        console.log('🌐 Running in WebStandard environment, using fetch export');
-    }
-}
+    })
+    .listen(process.env.PORT || 3001, ({ hostname, port }: { hostname: string; port: number }) => {
+        console.log(
+            `🦊 Elysia is running at ${hostname}:${port}`
+        )
+        console.log(`📈 Get random AI trading position at: http://${hostname}:${port}/position`)
+        console.log(`🔍 Analyze your position at: http://${hostname}:${port}/analyze (POST)`)
+    })
