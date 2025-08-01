@@ -117,8 +117,8 @@ const app = new Elysia()
 // For Railway's WebStandard environment, export the fetch handler
 export default app;
 
-// Start server for Railway deployment (Railway needs a listening server for health checks)
-if (typeof process !== "undefined") {
+// For local development, check if we're not in a WebStandard environment
+if (typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
     const port = process.env.PORT || 3001;
     try {
         app.listen(port, () => {
@@ -126,7 +126,8 @@ if (typeof process !== "undefined") {
             console.log(`📈 Get random AI trading position at: http://localhost:${port}/position`);
             console.log(`🔍 Analyze your position at: http://localhost:${port}/analyze (POST)`);
         });
+    // biome-ignore lint/correctness/noUnusedVariables: <explanation>
     } catch (error) {
-        console.log('🌐 Error starting server, using fetch export fallback:', error);
+        console.log('🌐 Running in WebStandard environment, using fetch export');
     }
 }
