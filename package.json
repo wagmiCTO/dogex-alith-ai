@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "type": "module",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc src/index.ts --outDir dist",
-    "start": "NODE_ENV=production node dist/index.js"
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "railway:build": "npm run build",
+    "railway:start": "npm run start"
   },
   "repository": {
     "type": "git",
