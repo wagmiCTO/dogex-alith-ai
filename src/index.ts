@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import { Agent } from "alith";
 import { Elysia } from 'elysia'
+import { node } from '@elysiajs/node'
 import { cors } from '@elysiajs/cors';
 import axios from 'axios';
 
@@ -29,7 +30,7 @@ const tradingPrompts = [
     "If you were a degen trader looking at DOGE charts right now, what would you do? Vibes only, one sentence."
 ];
 
-new Elysia()
+new Elysia({ adapter: node() })
     .use(cors({
         origin: true, // Allow all origins
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -113,7 +114,7 @@ new Elysia()
             };
         }
     })
-    .listen(process.env.PORT || 3001, ({ hostname, port }: { hostname: string; port: number }) => {
+    .listen(3001, ({ hostname, port }: { hostname: string; port: number }) => {
         console.log(
             `🦊 Elysia is running at ${hostname}:${port}`
         )
