@@ -62,8 +62,14 @@ app.get('/position', async (_req, res) => {
 
         const randomPrompt = tradingPrompts[Math.floor(Math.random() * tradingPrompts.length)] + priceInfo;
         const position = await agent.prompt(randomPrompt);
-        const leverage = Math.floor(Math.random() * 91) + 10; // Random number between 10-100
-
+        let leverage = 50;
+        const leverageMatch = position.match(/(\d+)x/i);
+        if (leverageMatch) {
+            const extractedLeverage = Number(leverageMatch[1]);
+            if (extractedLeverage >= 1 && extractedLeverage <= 100) {
+                leverage = extractedLeverage;
+            }
+        }
         res.json({
             leverage: leverage,
             position: position,
