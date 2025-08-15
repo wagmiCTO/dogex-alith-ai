@@ -22,11 +22,25 @@ async function getCurrentDogePrice() {
 }
 
 const tradingPrompts = [
-    "I'm a junior vibe trader that wants to earn on dogecoin with 50x leverage and 1 min chart. What position should I take rn? Not financial advice, just vibes. in one sentence",
-    "Give me a random crypto trading position for DOGE with high leverage. Pure vibes, no financial advice. One sentence only.",
-    "What's your gut feeling on DOGE right now? Long or short with 50x? Just vibes, one sentence.",
-    "Random DOGE position suggestion with crazy leverage? Not advice, just pure trader vibes. One sentence.",
-    "If you were a degen trader looking at DOGE charts right now, what would you do? Vibes only, one sentence."
+    "I'm a junior vibe trader that wants to earn on dogecoin with 50x leverage and 1 min chart. What position should I take rn? Drop some technical analysis wisdom with the memes. One sentence max!",
+
+    "Give me a random crypto trading position for DOGE with high leverage. Include a fun fact about leverage or trading psychology. Pure vibes + education in one sentence.",
+
+    "What's your gut feeling on DOGE right now? Long or short with crazy leverage? Explain why like you're teaching a golden retriever about trading. One sentence vibes.",
+
+    "Random DOGE position suggestion with insane leverage? Add a trading lesson disguised as a meme. Educational degeneracy in one sentence!",
+
+    "If you were a degen trader looking at DOGE charts right now, what would you do? Include why most traders lose money. Wise vibes only, one sentence.",
+
+    "DOGE trading position with maximum chaos energy? Throw in a risk management tip like you're a cool older sibling. One sentence of wisdom!",
+
+    "What would a trading bot dream about for DOGE? Include a psychological bias that destroys traders. Philosophical vibes in one sentence!",
+
+    "Give me a DOGE position that would make Elon tweet about it. Add why emotion kills profits. Meme wisdom in one sentence!",
+
+    "Random DOGE leverage play with the energy of a caffeinated day trader? Include why 90% of traders fail. Brutal honesty in one sentence!",
+
+    "What position would make Warren Buffett cry but crypto Twitter celebrate? Add a lesson about FOMO. Educational chaos in one sentence!"
 ];
 
 const app = express();
@@ -45,7 +59,17 @@ app.get('/', async (_req, res) => {
     try {
         const dogePrice = await getCurrentDogePrice();
         const priceInfo = dogePrice ? ` Current DOGE price: $${dogePrice.toFixed(6)}` : '';
-        res.send(`Hello DogEx - DOGE AI Trading Vibes. Fook loses and vibes only!${priceInfo}`);
+
+        const funnyGreetings = [
+            "🐕 Welcome to DogEx - Where DOGE dreams meet leverage nightmares!",
+            "🚀 DogEx: Teaching traders that 'YOLO' is not a risk management strategy!",
+            "📈 Welcome to the school of hard knocks and harder liquidations!",
+            "🎭 DogEx: Where comedy meets tragedy in the crypto markets!",
+            "🧠 Enter the matrix of memes and margin calls!"
+        ];
+
+        const randomGreeting = funnyGreetings[Math.floor(Math.random() * funnyGreetings.length)];
+        res.send(`${randomGreeting}${priceInfo} 🎯 Pro tip: The house always wins, but at least we make it educational!`);
     } catch (error) {
         res.status(500).json({
             success: false,
@@ -103,17 +127,27 @@ app.post('/analyze', async (req, res) => {
         const positionType = isLong ? "LONG" : "SHORT";
         const riskLevel = distanceToLiquidation < 10 ? "HIGH" : distanceToLiquidation < 25 ? "MEDIUM" : "LOW";
 
-        // Create analysis prompt
+        // Create analysis prompt with educational humor
         const funnyPrompts = [
-            `Your ${positionType} DOGE position is ${pnlSize >= 0 ? 'printing' : 'bleeding'}, ${distanceToLiquidation.toFixed(1)}% from liquidation - ${riskLevel} risk vibes only, one sentence!`,
+            `Your ${positionType} DOGE position is ${pnlSize >= 0 ? 'printing' : 'bleeding'}, ${distanceToLiquidation.toFixed(1)}% from liquidation - ${riskLevel} risk! Roast my position but teach me something about risk management. One sentence!`,
 
-            `DOGE ${positionType}: Entry $${entryPrice}, now $${currentPrice}, liq at $${liquidationPrice} - ${riskLevel} risk, pure vibes in one sentence!`,
+            `DOGE ${positionType}: Entry $${entryPrice}, now $${currentPrice}, liq at $${liquidationPrice} - ${riskLevel} risk! Give me wisdom disguised as trader comedy. One sentence of brutal truth!`,
 
-            `Your ${positionSize} DOGE ${positionType} is ${pnlSize >= 0 ? 'mooning' : 'cratering'}, ${distanceToLiquidation.toFixed(1)}% from rekt - vibe check in one sentence!`,
+            `Your ${positionSize} DOGE ${positionType} is ${pnlSize >= 0 ? 'mooning' : 'cratering'}, ${distanceToLiquidation.toFixed(1)}% from rekt - ${riskLevel} risk! Channel your inner trading guru and explain why this happened like I'm 5. One sentence!`,
 
-            `DOGE ${positionType} from $${entryPrice} to $${currentPrice}, PnL: ${pnlSize >= 0 ? '+' : ''}$${pnlSize}, ${riskLevel} risk - one sentence vibe only!`,
+            `DOGE ${positionType} from $${entryPrice} to $${currentPrice}, PnL: ${pnlSize >= 0 ? '+' : ''}$${pnlSize}, ${riskLevel} risk! Break down my trading psychology like a therapist who trades crypto. One sentence of wisdom!`,
 
-            `Your DOGE ${positionType} at $${currentPrice}, ${distanceToLiquidation.toFixed(1)}% from liquidation, ${riskLevel} risk ${pnlSize >= 0 ? 'gains' : 'pain'} - one sentence vibes!`
+            `Your DOGE ${positionType} at $${currentPrice}, ${distanceToLiquidation.toFixed(1)}% from liquidation, ${riskLevel} risk ${pnlSize >= 0 ? 'gains' : 'pain'}! Explain what went right/wrong using trading memes and education. One sentence!`,
+
+            `DOGE ${positionType} reality check: ${pnlSize >= 0 ? 'Winning' : 'Losing'} $${Math.abs(pnlSize)}, ${distanceToLiquidation.toFixed(1)}% from rekt! Give me a trading lesson wrapped in sarcasm and hope. One sentence!`,
+
+            `Your ${positionSize} DOGE ${positionType} journey from $${entryPrice} to $${currentPrice} - ${riskLevel} risk vibes! Analyze this like a wise degen who's seen everything. Educational roast in one sentence!`,
+
+            `DOGE ${positionType} status: ${pnlSize >= 0 ? 'Chad energy' : 'Pain train'}, ${distanceToLiquidation.toFixed(1)}% from game over! Explain the market psychology behind this move. One sentence of truth!`,
+
+            `Position update: DOGE ${positionType} with ${riskLevel} risk, ${pnlSize >= 0 ? 'printing' : 'burning'} money! Break down why leverage is both friend and enemy. One sentence lesson!`,
+
+            `Your DOGE ${positionType} adventure: Entry $${entryPrice}, current $${currentPrice}, liquidation lurking at $${liquidationPrice}! Explain position sizing wisdom through crypto comedy. One sentence!`
         ];
 
         const randomPrompt = funnyPrompts[Math.floor(Math.random() * funnyPrompts.length)];
@@ -140,4 +174,5 @@ app.listen(PORT, () => {
     console.log(`🦊 Express server is running at localhost:${PORT}`);
     console.log(`📈 Get random AI trading position at: http://localhost:${PORT}/position`);
     console.log(`🔍 Analyze your position at: http://localhost:${PORT}/analyze (POST)`);
+    console.log(`🎭 Educational comedy meets crypto chaos!`);
 });
