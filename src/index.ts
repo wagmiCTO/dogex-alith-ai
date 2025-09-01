@@ -9,7 +9,6 @@ const agent = new Agent({
     apiKey: process.env.GROQ_API_KEY,
     baseUrl: "https://api.groq.com/openai/v1",
 });
-console.log('llama-3.1-8b-instant')
 
 // Function to fetch current DOGE price from Binance
 async function getCurrentDogePrice() {
@@ -172,6 +171,7 @@ app.post('/analyze', async (req, res) => {
 
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
+    console.log('llama-3.1-8b-instant')
     console.log(`🦊 Express server is running at localhost:${PORT}`);
     console.log(`📈 Get random AI trading position at: http://localhost:${PORT}/position`);
     console.log(`🔍 Analyze your position at: http://localhost:${PORT}/analyze (POST)`);
