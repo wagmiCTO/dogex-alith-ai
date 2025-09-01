@@ -9,6 +9,7 @@ const agent = new Agent({
     apiKey: process.env.GROQ_API_KEY,
     baseUrl: "https://api.groq.com/openai/v1",
 });
+console.log('llama-3.1-8b-instant')
 
 // Function to fetch current DOGE price from Binance
 async function getCurrentDogePrice() {
