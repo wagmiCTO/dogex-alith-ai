@@ -5,7 +5,7 @@ import cors from 'cors';
 import axios from 'axios';
 
 const agent = new Agent({
-    model: "llama-3.1-8b-instant",
+    model: "llama3-70b-8192",
     apiKey: process.env.GROQ_API_KEY,
     baseUrl: "https://api.groq.com/openai/v1",
 });
