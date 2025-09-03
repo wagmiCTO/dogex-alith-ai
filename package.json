@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "@types/cors": "^2.8.19",
-    "alith": "^0.10.4",
+    "alith": "^0.12.0",
     "axios": "^1.8.4",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
